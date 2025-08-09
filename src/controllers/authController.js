@@ -1,5 +1,8 @@
 import bcrypt from 'bcryptjs';
 import User from '../models/user.js';
+import speakeasy from 'speakeasy';
+import QRCode from 'qrcode';
+import jwt from 'jsonwebtoken';
 
 export const register = async (req, res)=> {
     try {
@@ -53,6 +56,30 @@ export const logout = async (req , res) => {
         })
     
 };
-export const setup2FA = async () => {};
+export const setup2FA = async (req, res) => {
+    try {
+        console.log("Setting up 2FA for user:", req.user);
+        const user = req.user;
+        var secret = speakeasy.generateSecret();
+        console.log("The secret is:", secret);
+        user.twoFactorSecret = secret.base32; // Store the secret in the user's document
+        user.isMfaActive = true;
+        await user.save()
+        const url = speakeasy.otpauthURL({
+            secret: secret.base32,
+            label: `${req.user.username}`,
+            issuer: "www.sujairibrahim.com",
+            encoding: 'base32'
+        })
+        const qrImageUrl = await QRCode.toDataURL(url)
+        res.status(200).json({
+            secret: secret.base32,
+            QRCode: qrImageUrl
+        })
+    } catch (error) {
+        res.status(500).json({error: 'Error setting up 2FA', message: error});
+        
+    }
+};
 export const verify2FA = async () => {};
 export const reset2FA = async () => {};
