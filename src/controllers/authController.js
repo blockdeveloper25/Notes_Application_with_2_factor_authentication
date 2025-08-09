@@ -25,14 +25,34 @@ export const login = async (req, res) => {
     console.log("The authenticated user is:", req.user);
     res.status(200).json({
         message: 'Login successful',
-        user: {
-            username: req.user.username,
-            isMfaActive: req.user.isMfaActive,
-        }
+        username: req.user.username,
+        isMfaActive: req.user.isMfaActive,
+        
     });
 };
-export const authStatus = async () => {};
-export const logout = async () => {};
+export const authStatus = async (req, res) => {
+    if (req.user){
+        res.status(200).json({
+            message: 'User is authenticated',
+            username: req.user.username,
+            isMfaActive: req.user.isMfaActive,
+        });
+
+    } else{
+        res.status(401).json({message: 'User is not authenticated'});
+    }
+};
+export const logout = async (req , res) => {
+    if (!req.user) res.status(401).json({message: 'User is not authenticated'});
+    req.logout((err) => {
+            if (err) {
+                return res.status(400).json({message: 'User Not Logged in'});
+
+            }
+            res.status(200).json({message: 'User logged out successfully'});
+        })
+    
+};
 export const setup2FA = async () => {};
 export const verify2FA = async () => {};
 export const reset2FA = async () => {};

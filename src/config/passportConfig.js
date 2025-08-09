@@ -23,7 +23,7 @@ passport.use(
 
 passport.serializeUser((user, done) => {
     console.log("We are inside serializeUser");
-  done(null, user._id);
+    done(null, user._id);
 });
 
 passport.deserializeUser(async (_id, done) => {

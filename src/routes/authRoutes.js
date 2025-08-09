@@ -17,7 +17,7 @@ router.post('/register', register);
 router.post('/login',passport.authenticate("local"), login)
 
 // Auth Status Route
-router.get('/auth-status', authStatus)
+router.get('/status', authStatus)
 // Logout Route
 router.get('/logout', logout)
 
