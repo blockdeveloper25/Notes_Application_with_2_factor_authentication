@@ -81,12 +81,12 @@ export const verify2FA = async (req, res) => {
 
   const verified = speakeasy.totp.verify({
     secret: user.twoFactorSecret,
-    encode: "base32",
+    encoding: 'base32',
     token,
   });
   if (verified) {
     const jwtTocken = jwt.sign({ username: user.username }, process.env.JWT_SECRET, {
-      expiresIn: "1hr",
+      expiresIn: "1h",
     });
     res.status(200).json({message:"2FA Successful", token: jwtTocken})
   } else {
