@@ -1,3 +1,6 @@
+import api from "./api";
+
+
 export const register = async (username, password) => {
   return await api.post("/auth/register", {
     username,

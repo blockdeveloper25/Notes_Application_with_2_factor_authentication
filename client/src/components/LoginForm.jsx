@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { register, login } from "../service/authApi";
 
 function LoginForm() {
   const [isRegister, setIsRegister] = useState(false);
@@ -9,11 +10,29 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleLogin = () => {};
-  const handleRegister = () => {};
+  const handleLogin = async (e) => {
+   
+  };
+  const handleRegister = async (e) => {
+     e.preventDefault()
+    try {
+      const { data } = await register(username, password);
+      
+      setMessage(data.message);
+      console.log(data.message);
+      setIsRegister(false);
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      console.log("The err is:", error);
+      setUsername("");
+      setPassword("");
+      setError("Something Went wrong during the registration");
+    }
+  };
   return (
     <form
-      onSubmit={isRegister ? handleRegister() : handleLogin()}
+      onSubmit={isRegister ? handleRegister : handleLogin}
       className="p-4 bg-white rounded-lg shadow-md w-full max-w-sm mx-auto"
     >
       <div className="pt-6">
@@ -43,7 +62,7 @@ function LoginForm() {
         <div className="mb-4">
           <label className="text-gray-600 text-sm"> Password</label>
           <input
-            type="text"
+            type="password"
             label="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -56,7 +75,7 @@ function LoginForm() {
           <div className="mb-4">
             <label className="text-gray-600 text-sm">Confirm Password</label>
             <input
-              type="text"
+              type="password"
               label="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -79,7 +98,7 @@ function LoginForm() {
       </button>
       <div>
         <p className="pt-4 text-center text-gray-600 text-sm ">
-          {isRegister ? "Already have an account" : "Don't have an account"} ?{" "}
+          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
           <Link to="" onClick={() => setIsRegister(!isRegister)}>
             {isRegister ? "Login" : "Create Account"}
           </Link>
