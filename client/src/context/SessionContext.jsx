@@ -8,6 +8,8 @@ export const SessionProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
+useEf
+
   const login = (userData) => {
     setIsLoggedIn(true);
     setUser(userData);
