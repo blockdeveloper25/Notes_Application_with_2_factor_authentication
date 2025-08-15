@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { register, login } from "../service/authApi";
 
-function LoginForm() {
+function LoginForm({onLoginSccess}) {
   const [isRegister, setIsRegister] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -10,23 +10,46 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const handleRegisterToggle = () => {
+    setIsRegister(!isRegister);
+    setError("");
+    setMessage("");
+  };
   const handleLogin = async (e) => {
-   
+    e.preventDefault();
+    try {
+      const { data } = await login(username, password);
+
+      setMessage(data.message);
+      console.log(data.message);
+      setUsername("");
+      setPassword("");
+      setError("")
+      onLoginSccess(data)
+    } catch (error) {
+      console.log("The err is:", error);
+      setUsername("");
+      setPassword("");
+      setMessage("")
+      setError("Invalid Login Credentials");
+    }
   };
   const handleRegister = async (e) => {
-     e.preventDefault()
+    e.preventDefault();
     try {
       const { data } = await register(username, password);
-      
+
       setMessage(data.message);
       console.log(data.message);
       setIsRegister(false);
       setUsername("");
       setPassword("");
+      setConfirmPassword("");
     } catch (error) {
       console.log("The err is:", error);
       setUsername("");
       setPassword("");
+      setConfirmPassword("");
       setError("Something Went wrong during the registration");
     }
   };
@@ -99,7 +122,7 @@ function LoginForm() {
       <div>
         <p className="pt-4 text-center text-gray-600 text-sm ">
           {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
-          <Link to="" onClick={() => setIsRegister(!isRegister)}>
+          <Link to="" onClick={() => handleRegisterToggle()}>
             {isRegister ? "Login" : "Create Account"}
           </Link>
         </p>
