@@ -13,10 +13,11 @@ const TwoFASetup = ({ onSetupComplete }) => {
   useEffect(() => {
     fetchQRCode();
   }, []);
-  const copyClipBoard = async () => {
-    await navigator.clipboard.writeText(response.secret);
-    setMessage("");
-  };
+  const copyClipBoard = (e) => {
+  navigator.clipboard.writeText(response.secret)
+    .then(() => alert("Copied!"))
+    .catch(err => console.error("Failed to copy:", err));
+};
   return (
     <div className="p-4 bg-white rounded-lg shadow-md w-full max-w-sm mx-auto">
       <div className="pt-6">
@@ -30,11 +31,11 @@ const TwoFASetup = ({ onSetupComplete }) => {
       </p>
       <div className="p-6">
         <div className="flex justify-center">
-          <img
-            src={response.QRCode}
-            alt="2FA QR code"
-            className="mb-4"
-          />
+          {response.QRCode ? (
+            <img src={response.QRCode} alt="2FA QR code" className="mb-4" />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex items-center mt-3 mb-3">
           <div className="border-t border-gray-200 flex-grow"></div>

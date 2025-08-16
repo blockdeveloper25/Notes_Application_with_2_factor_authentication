@@ -39,7 +39,7 @@ export const setup2FA = async () => {
   });
 };
 
-export const verify2FA = async () => {
+export const verify2FA = async (token) => {
   return await api.post("/auth/2fa/verify",
     {
         token
