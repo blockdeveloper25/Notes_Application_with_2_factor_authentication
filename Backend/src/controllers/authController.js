@@ -46,9 +46,16 @@ export const logout = async (req, res) => {
   if (!req.user) res.status(401).json({ message: "User is not authenticated" });
   req.logout((err) => {
     if (err) {
-      return res.status(400).json({ message: "User Not Logged in" });
+      return next(err)
     }
-    res.status(200).json({ message: "User logged out successfully" });
+    req.session.destroy((err) => {
+      if (err){
+        return next(err)
+      }
+      //Clear Cookie
+      res.clearCookie("connect.sid")
+      res.status(200).json({message:"Loggedout Successfully"})
+    })
   });
 };
 export const setup2FA = async (req, res) => {

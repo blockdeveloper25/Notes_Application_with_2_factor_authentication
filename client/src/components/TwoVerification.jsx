@@ -12,7 +12,7 @@ const TwoVerification = ({ onVerifySuccess, onResetSucces }) => {
   const handleTokenVerification = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await verify2FA();
+      const { data } = await verify2FA(otp);
       onVerifySuccess(data);
     } catch (error) {
       setOtp("");
